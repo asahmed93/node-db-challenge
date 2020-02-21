@@ -1,11 +1,11 @@
 const express = require('express');
 
-const project = require('./project-model');
+const projects = require('./project-model');
 
 const router = express.Router()
 
 router.get('/', (req, res) => {
-    project.getProjects()
+    projects.getProjects()
     .then( projects => {
         res.status(200).json(projects)
     })
@@ -15,21 +15,23 @@ router.get('/', (req, res) => {
 })
 
 router.get("/:id", (req,res) => {
-    project.getById(req.params.id)
-        .then(project => {
-            if(project){
-                res.status(200).json(project)
-            } else {
-                res.status(404).json( {message: 'ID NOT FOUND'})
-            }
-        })
-        .catch(() => {
-            res.status(500).json({message: 'Cannot get project'})
-        })
+    projects.getByID(req.params.id)
+    .then(project => {
+        if(project){
+            res.status(200).json(project)
+        } else {
+            res.status(404).json({message: "PROJECT NOT FOUND"})
+        }
+    })
+    .catch(() => {
+        res.status(500).json({message: "Cannot find project"})
+    })
 })
 
 router.get("/:id/tasks", (req,res) => {
-    project.getProjectTasks(req.params.id)
+    const id = req.params.id
+    console.log(id)
+    projects.getProjectTasks(id)
     .then(tasks => {
         if(tasks){
             res.status(200).json(tasks)
@@ -38,14 +40,16 @@ router.get("/:id/tasks", (req,res) => {
         }
     })
     .catch(()=> {
-        res.status(500).json({message: 'Failed to get projects'})
+        res.status(500).json({message: 'Failed to get projects tasks'})
     })
 })
 
 router.post('/', (req, res) => {
-    project.add(req.body)
-    .then(project => {
-        res.status(201).json(project)
+    const projectBody = req.body
+
+    projects.add(projectBody)
+    .then( newProject => {
+        res.status(201).json(newProject)
     })
     .catch(() => {
         res.status(500).json({ message: 'Cannot add Project'})

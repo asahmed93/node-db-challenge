@@ -4,7 +4,7 @@ module.exports = {
     getProjects,
     getByID,
     getProjectTasks,
-    add,
+    add
 }
 
 function getProjects(){
@@ -12,22 +12,24 @@ function getProjects(){
 }
 
 function getByID(id){
+    console.log(id)
     return db("projects").where({id}).first();
 }
 
 function getProjectTasks(id){
-    return db("tasks")
-    .join("projects", "tasks.project_id", "projects.id")
-    .where("projects.id", id)
-    .select("tasks.id",
-     "projects.project_name as projectName",
-    "projects.project_description as projectDescription",
-     "tasks.task_description as description",
-     "tasks.task_notes as notes",
-     "tasks.completed as completed")
+    return db("tasks as t")
+    .join("projects a p", "t.projectID", "p.id")
+    .where("id", id)
+    .select(
+    "t.*",
+    "p.projectName",
+    "p.project_description",
+    )
 }
 
 function add(project){
+    const {projectName} = project
+    
     return db("projects")
-    .insert(project)
+    .insert({projectName})
 }

@@ -16,9 +16,9 @@ server.get('/', (req, res) => {
 
 server.use('/api/projects', ProjectRouter);
 
-server.use('./api/resources', ResourceRouter);
+server.use('/api/resources', ResourceRouter);
 
-server.use('./api/tasks', TaskRouter);
+server.use('/api/tasks', TaskRouter);
 
 
 

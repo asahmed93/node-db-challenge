@@ -7,12 +7,10 @@ const router = express.Router()
 router.get('/', (req,res) => {
     resource.getResources()
     .then(resource => {
-        then(resource => {
-            res.json(resource)
-        })
-        .catch( err => {
+        res.status(200).json(resource)
+    })
+    .catch( err => {
             res.status(500).json({ message: 'Cannot get resources'})
-        })
     })
 })
 
@@ -39,3 +37,5 @@ router.post("/", (req,res) => {
         res.status(500).json({ message: "Cannot add resource"})
     })
 })
+
+module.exports = router;
